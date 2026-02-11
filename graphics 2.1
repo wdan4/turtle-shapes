@@ -1,11 +1,10 @@
 
-
 from turtle import *
 import turtle as bob
 import random
 
 global colourbg
-bob.bgcolor(colour) #background color picking function
+bob.bgcolor(colourbg) #background color picking function
 global colour
 bob.color(colour) #color picker
 global user_size
@@ -121,7 +120,7 @@ def draw_squares():
     is_drawing = True
     bob.clear()
     for i in range(18):
-        .color(color)
+        bob.color(color)
         for n in range(4):
            bob.forward(100)
            bob.left(90)
@@ -136,3 +135,6 @@ bob.onkey(draw_flowers, "f")
 bob.onkey(draw_single_flowers, "i") 
 
 bob.mainloop()
+
+
+
