@@ -100,7 +100,9 @@ slidertn.place(x=20, y=210)
 #TOP
 
 def starf():
-    print("69")
+    for i in range(5):
+        bob.forward(200)
+        bob.left(144)
 
 def polygonf():
     print("69")
@@ -109,7 +111,17 @@ def chatf():
     print("69")
 
 def circlesf():
-    print("69")
+    global is_drawing
+    if is_drawing:
+        return
+    
+    is_drawing = True 
+    bob.clear()
+    for i in range(36):
+        bob.color("purple")
+        bob.circle(100)
+        bob.left(10)
+    is_drawing = False 
 
 def yesf():
     print("69")
