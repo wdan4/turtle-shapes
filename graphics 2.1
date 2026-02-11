@@ -1,0 +1,138 @@
+
+
+from turtle import *
+import turtle as bob
+import random
+
+global colourbg
+bob.bgcolor(colour) #background color picking function
+global colour
+bob.color(colour) #color picker
+global user_size
+bob.pensize(user_size) #size or thickness picker whatever works
+global user_speed
+bob.speed(user_speed) #speed picker
+bob.hideturtle()
+
+colors = ["white", "yellow", "magenta", "cyan", "lime", "orange", "hotpink", "red", "blue"]
+
+global is_drawing
+is_drawing = False
+
+
+colors = ["white", "yellow", "magenta", "cyan", "lime", "orange", "hotpink", "red", "blue"]
+is_drawing = False
+
+def star():
+    for i in range(5):
+        bob.forward(200)
+        bob.left(144)
+        
+def small_star():
+    for i in range(5):
+        bob.forward(100)
+        bob.left(144)
+
+def make_circle():
+    bob.circle(150, 360)
+    bob.left(30)
+
+def flower():
+    small_star()
+    make_circle()
+
+def single_flower():
+    setpos(0,0)
+    flower()
+        
+         
+
+
+def draw_flowers():
+    global is_drawing, user_speed, colors
+    if is_drawing:
+        return
+    
+    is_drawing = True
+    bob.clear()
+    
+
+    for i in range(25):
+        bob.color(random.choice(colors))
+        
+
+        bob.penup()
+        rpos = random.randrange(-400, 400, 10)
+        dpos = random.randrange(-400, 400, 10)
+        bob.setpos(rpos, dpos)
+        bob.pendown()
+        
+     
+        for n in range(12):
+            star()
+            make_circle()
+            
+    is_drawing = False
+
+def draw_single_flowers():
+    global is_drawing, colors
+    if is_drawing:
+        return
+    
+    is_drawing = True
+    bob.clear()
+    
+
+    bob.color(random.choice(colors))
+        
+
+    bob.penup()
+    rpos = 0
+    dpos = 0
+    bob.setpos(rpos, dpos)
+    bob.pendown()
+        
+     
+    for n in range(12):
+        small_star()
+        make_circle()
+            
+    is_drawing = False
+
+
+def draw_circles():
+    global is_drawing
+    if is_drawing:
+        return
+    
+    is_drawing = True 
+    bob.clear()
+    for i in range(36):
+        bob.color("purple")
+        bob.circle(100)
+        bob.left(10)
+    is_drawing = False 
+
+def draw_squares():
+    global is_drawing, colour 
+    if is_drawing:
+        return
+    
+    is_drawing = True
+    bob.clear()
+    for i in range(18):
+        .color(color)
+        for n in range(4):
+           bob.forward(100)
+           bob.left(90)
+        bob.left(20)
+    is_drawing = False
+
+
+bob.listen()
+bob.onkey(draw_circles, "c") 
+bob.onkey(draw_squares, "s")
+bob.onkey(draw_flowers, "f")
+bob.onkey(draw_single_flowers, "i") 
+
+bob.mainloop()
