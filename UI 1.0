@@ -1,0 +1,57 @@
+import tkinter as tk
+from tkinter import colorchooser
+from tkinter import ttk
+from turtle import *
+
+def drawImg():
+    bob.pensize(thickness.get())
+    for _ in range(4):
+        bob.forward(10*scale.get())
+        bob.right(90)
+
+
+def changeColour():
+    colour.set(colorchooser.askcolor()[1])
+    canColor.config(bg=colour.get())
+    bob.color(colour.get())
+
+# main window
+root = tk.Tk()
+style = ttk.Style()
+root.title("Drawmaster 3000")
+
+# central turtle widget
+turtle_frame = ttk.Frame(root)
+turtle_frame.grid(row=1, column=1)
+canvas = tk.Canvas(turtle_frame, width=400, height=400)
+canvas.pack()
+screen = TurtleScreen(canvas)
+screen.bgcolor("white")
+bob = RawTurtle(screen)
+
+# LEFT frame
+scale = tk.IntVar(value=1)
+thickness = tk.IntVar(value=1)
+colour = tk.StringVar(value="#2574a6")
+
+framLeft= ttk.Frame(root)
+framLeft.grid(row=1, column=0)
+butDraw = ttk.Button(framLeft, text="Draw Image", command=drawImg)
+butDraw.grid(row=0, column=0, columnspan=2)
+butClear = ttk.Button(framLeft, text="Clear", command=lambda: bob.clear())
+butClear.grid(row=1, column=0, columnspan=2)
+labScale = ttk.Label(framLeft, text='Scale: ')
+labScale.grid(row=3, column=0)
+canColor = tk.Canvas(framLeft, bg=colour.get(), width=100, height=50)
+canColor.grid(row=5, column=1)
+sliScale = ttk.Spinbox(framLeft, from_=1, to=10, textvariable=scale, width=5)
+sliScale.grid(row=3, column=1)
+labThick = ttk.Label(framLeft, text='Thickness: ')
+labThick.grid(row=4, column=0)
+sliThick = ttk.Spinbox(framLeft, from_=1, to=10, textvariable=thickness, width=5)
+sliThick.grid(row=4, column=1)
+butColor = ttk.Button(framLeft, text="Change pen colour", command=changeColour)
+butColor.grid(row=5, column=0)
+
+
+root.mainloop()
