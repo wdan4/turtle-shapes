@@ -6,10 +6,7 @@ import random
 
 global colourbg
 colourbg = tt.bgcolour('black') #background color picking function
-global colour
-colour == 
-global user_size
-global user_speed
+
 
 tt.pensize(2)
 tt.speed(0)
