@@ -4,6 +4,7 @@ from tkinter import colorchooser
 from tkinter.ttk import *
 
 
+
 colour = "#000000"
 
 screen = Screen()
@@ -85,6 +86,8 @@ cwb.place(x=160, y=20)
 
 
 
+
+
 # SLIDERS
 
 slidersc = tk.Scale(canvas.master, label="Scale", from_ =0, to =10, bg="#1192E9", orient='horizontal')
@@ -96,21 +99,41 @@ slidertn.place(x=20, y=210)
 
 #TOP
 
+def starf():
+    print("69")
+
+def polygonf():
+    print("69")
+
+def chatf():
+    print("69")
+
+def circlesf():
+    print("69")
+
+def yesf():
+    print("69")
+
+
+
 #BUTTONS
 
 
 
-star = Button(canvas.master, text="Star", command=lambda: pickColour(), width=6)
+star = Button(canvas.master, text="Star", command=lambda: starf(), width=6)
 star.place(x=760, y=20)
 
-polygon = Button(canvas.master, text="Polygon", command=lambda: pickColour(), width=8)
+polygon = Button(canvas.master, text="Polygon", command=lambda: polygonf(), width=8)
 polygon.place(x=860, y=20)
 
-chat = Button(canvas.master, text="Chat", command=lambda: pickColour(), width=6)
+chat = Button(canvas.master, text="Chat", command=lambda: chatf(), width=6)
 chat.place(x=960, y=20)
 
-circles = Button(canvas.master, text="Circles", command=lambda: pickColour(), width=6)
+circles = Button(canvas.master, text="Circles", command=lambda: circlesf(), width=6)
 circles.place(x=1060, y=20)
+
+yes = Button(canvas.master, text="What juicewrld saw before he died.", command=lambda: yesf(), width=42)
+yes.place(x=1160, y=20)
 
 # RIGHT
 
