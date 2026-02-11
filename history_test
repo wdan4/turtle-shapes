@@ -1,0 +1,34 @@
+from turtle import *
+import tkinter as tk
+from tkinter import ttk
+from functools import partial
+
+
+command_history =[]
+
+root = tk.Tk()
+turtle_frame = ttk.Frame(root)
+turtle_frame.grid(row=1, column=1)
+canvas = tk.Canvas(turtle_frame, width=400, height=400)
+canvas.pack()
+screen = TurtleScreen(canvas)
+bob = RawTurtle(screen)
+
+def draw_star(colour,speed,thickness,scale):
+    bob.color(colour)
+    bob.speed(speed)
+    bob.pensize(thickness)
+    for _ in range(5):
+        bob.forward(scale)
+        bob.right(144)
+
+colour,speed,thickness,scale = "#123456",6,3,40
+
+
+command_history.append(partial(draw_star, colour,speed,thickness,scale))
+draw_star(colour,speed,thickness,scale)
+
+print(command_history)
+
+for cmd in command_history:
+    cmd()
