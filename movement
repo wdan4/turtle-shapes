@@ -1,0 +1,93 @@
+from machine import I2C, Pin
+import time
+import struct
+import pygame
+
+# ----------------- I2C Setup -----------------
+I2C_SCL_PIN = 22  # GPIO 22 for SCL
+I2C_SDA_PIN = 21  # GPIO 21 for SDA
+i2c = I2C(0, scl=Pin(I2C_SCL_PIN), sda=Pin(I2C_SDA_PIN), freq=400000)  # 400 kHz I2C
+
+# Motor driver I2C address
+MOTOR_ADDR = 0x34
+
+# Registers
+MOTOR_TYPE_ADDR = 0x14
+MOTOR_ENCODER_POLARITY_ADDR = 0x15
+MOTOR_FIXED_SPEED_ADDR = 0x33
+
+# Motor type and encoder polarity
+MotorType = 3  # JGB37_520_12V_110RPM
+MotorEncoderPolarity = 1
+
+# Max motor speed
+MAX_SPEED = 100
+
+# ----------------- Motor Functions -----------------
+def motor_init():
+    """Initialize motor driver with motor type and polarity."""
+    try:
+        i2c.writeto_mem(MOTOR_ADDR, MOTOR_TYPE_ADDR, bytes([MotorType]))
+        time.sleep(0.5)
+        i2c.writeto_mem(MOTOR_ADDR, MOTOR_ENCODER_POLARITY_ADDR, bytes([MotorEncoderPolarity]))
+        print("Motor driver initialized successfully.")
+    except OSError as e:
+        print(f"Failed to initialize motor driver: {e}")
+
+def set_motor_speed(speed):
+    """Set motor speed; converts negative values to unsigned bytes."""
+    try:
+        # Convert -100..100 -> 0..255 (assuming driver uses signed byte)
+        speed_bytes = bytearray([(s + 256) % 256 for s in speed])
+        i2c.writeto_mem(MOTOR_ADDR, MOTOR_FIXED_SPEED_ADDR, speed_bytes)
+    except OSError as e:
+        print(f"Failed to set motor speed: {e}")
+
+# ----------------- PS4 Controller Setup -----------------
+def init_ps4():
+    pygame.init()
+    pygame.joystick.init()
+    if pygame.joystick.get_count() == 0:
+        print("No joystick detected!")
+        return None
+    controller = pygame.joystick.Joystick(0)
+    controller.init()
+    print(f"Controller initialized: {controller.get_name()}")
+    return controller
+
+def read_left_stick(controller):
+    """Return vertical axis of left stick: -1 (up) to 1 (down)."""
+    pygame.event.pump()
+    axis_value = controller.get_axis(1)  # Left stick vertical
+    # Invert so up = positive speed
+    return -axis_value
+
+# ----------------- Main Loop -----------------
+def main():
+    motor_init()
+    controller = init_ps4()
+    if controller is None:
+        return
+
+    try:
+        while True:
+            # Read left stick
+            y = read_left_stick(controller)
+
+            # Scale to motor speed
+            speed_val = int(y * MAX_SPEED)
+            # For tank drive, left and right motors move the same for forward/back
+            speed = [speed_val, speed_val, 0, 0]  # Only first 2 motors for now
+            set_motor_speed(speed)
+
+            # Optional: print for debug
+            print(f"Left stick: {y:.2f} -> Motor speed: {speed_val}")
+
+            time.sleep(0.05)  # Small delay to prevent flooding I2C
+    except KeyboardInterrupt:
+        # Stop motors on exit
+        set_motor_speed([0, 0, 0, 0])
+        print("Exiting, motors stopped.")
+
+if __name__ == "__main__":
+    main()
