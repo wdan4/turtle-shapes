@@ -1,0 +1,51 @@
+from evdev import InputDevice, ecodes
+
+# CHANGE THIS to your controller event (from evtest)
+
+device = InputDevice('/dev/input/event2')
+
+MAX_SPEED = 100
+
+print(f"Connected to: {device.name}")
+
+print("Move left stick up/down...")
+
+for event in device.read_loop():
+
+    # Only joystick movement events
+
+    if event.type == ecodes.EV_ABS:
+
+        # Left stick vertical axis is usually ABS_Y (we confirm from evtest)
+
+        if event.code == ecodes.ABS_Y:
+
+            # Convert raw value (-32768 to 32767) into -1 to 1
+
+            normalized = -event.value / 32768
+
+            # Convert to motor speed
+
+            speed = int(normalized * MAX_SPEED)
+
+            # Simple deadzone (prevents drift)
+
+            if abs(speed) < 5:
+
+                speed = 0
+
+            # Simulated motor output
+
+            print(f"Joystick: {normalized:.2f} → Motor Speed: {speed}")
+
+            if speed > 0:
+
+                print("Robot: FORWARD")
+
+            elif speed < 0:
+
+                print("Robot: BACKWARD")
+
+            else:
+
+                print("Robot: STOP")
